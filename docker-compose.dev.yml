@@ -45,34 +45,34 @@ services:
             - "8888:8888"
         env_file: 
             - ./docker/jupyter/secrets.env
-        # depends_on: 
-        #     - mlflow
+        depends_on: 
+            - mlflow
         # environment:
         #     MLFLOW_TRACKING_URI: 'http://mlflow:5000'
         #     AWS_ACCESS_KEY_ID: ivnard
         #     AWS_SECRET_ACCESS_KEY: Orion123
         #     MLFLOW_S3_ENDPOINT_URL: 'http://minio:9000'
 
-    # # Tracking server
-    # mlflow:
-    #     build:
-    #         context: ./tracking
-    #         dockerfile: Dockerfile
-    #     image: mlflow-dev:1
-    #     container_name: tracking-server-dev
-    #     volumes: 
-    #         - mlflow:/mlflow
-    #     ports:
-    #         - "5000:5000"
-    #     networks:
-    #         - development
-    #     depends_on: 
-    #         - postgres
-    #         - minio
-    #     environment: 
-    #         MLFLOW_S3_ENDPOINT_URL: http://minio:9000
-    #         AWS_ACCESS_KEY_ID: ivnard
-    #         AWS_SECRET_ACCESS_KEY: Orion123
+    # Tracking server
+    mlflow:
+        build:
+            context: ./tracking
+            dockerfile: Dockerfile
+        image: mlflow-dev:1
+        container_name: tracking-server-dev
+        volumes: 
+            - mlflow:/mlflow
+        ports:
+            - "5000:5000"
+        networks:
+            - development
+        # depends_on: 
+        #     - postgres
+        #     - minio
+        environment: 
+            MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+            AWS_ACCESS_KEY_ID: ivnard
+            AWS_SECRET_ACCESS_KEY: Orion123
 
     # # Tracking backend database
     # postgres:
@@ -109,8 +109,8 @@ services:
 
 volumes:
     datasql:
-    # mlflow:
-    # datapostgres:
+    mlflow:
+    datapostgres:
     # dataminio:
 
 networks: 

@@ -56,8 +56,8 @@ services:
     # Tracking server
     mlflow:
         build:
-            context: ./tracking
-            dockerfile: Dockerfile
+            context: ./docker/mlflow
+            dockerfile: Dockerfile.mlflow
         image: mlflow-dev:1
         container_name: tracking-server-dev
         volumes: 

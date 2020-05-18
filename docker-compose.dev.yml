@@ -43,8 +43,8 @@ services:
             - development
         ports:
             - "8888:8888"
-        depends_on: 
-            - mlflow
+        # depends_on: 
+        #     - mlflow
         environment:
             MLFLOW_TRACKING_URI: 'http://mlflow:5000'
             AWS_ACCESS_KEY_ID: ivnard

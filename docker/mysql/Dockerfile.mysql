@@ -11,9 +11,10 @@ ENV MYSQL_USER='ivnard'
 ENV MYSQL_PASSWORD='Orion123'
 ENV MYSQL_ROOT_PASSWORD='Orion123'
 
-# COPY ./sample/*.csv /var/lib/mysql-files/
-COPY ./sample/trx_data.csv /var/lib/mysql-files/
-COPY  ./init/my.cnf /etc/mysql/my.cnf
-COPY ./sql-scripts /docker-entrypoint-initdb.d/
+
+# COPY ./sample/trx_data.csv /var/lib/mysql-files/
+COPY ../../data/sample/*.csv /var/lib/mysql-files/
+COPY  ../../init/my.cnf /etc/mysql/my.cnf
+COPY ../../sql-scripts /docker-entrypoint-initdb.d/
 
 # EXPOSE 3306

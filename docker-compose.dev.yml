@@ -1,0 +1,115 @@
+version: '3'
+
+services:
+
+    # Database Storage
+    mysql:
+        build:
+            context: ./data
+            dockerfile: Dockerfile
+        image: mysql-dev:1
+        container_name: database-sample-dev
+        volumes: 
+            - datasql:/var/lib/mysql
+        networks:
+            - development
+        ports:
+            # HostPort:ContainerPort
+            - "8079:8079"
+        restart: always
+
+    # Database Manager
+    adminer:
+        image: adminer:4
+        networks:
+            - development
+        ports:
+            - "8080:8080"
+        depends_on: 
+            - mysql
+            - postgres
+        restart: always
+
+    # Notebook 
+    jupyterlab:
+        build:
+            context: ./notebook
+            dockerfile: Dockerfile
+        image: jupyterlab-dev:1
+        container_name: notebook-dev
+        volumes:
+            - ./:/home/jovyan/work/ModelOps
+        networks: 
+            - development
+        ports:
+            - "8888:8888"
+        depends_on: 
+            - mlflow
+        environment:
+            MLFLOW_TRACKING_URI: 'http://mlflow:5000'
+            AWS_ACCESS_KEY_ID: ivnard
+            AWS_SECRET_ACCESS_KEY: Orion123
+            MLFLOW_S3_ENDPOINT_URL: 'http://minio:9000'
+
+    # Tracking server
+    mlflow:
+        build:
+            context: ./tracking
+            dockerfile: Dockerfile
+        image: mlflow-dev:1
+        container_name: tracking-server-dev
+        volumes: 
+            - mlflow:/mlflow
+        ports:
+            - "5000:5000"
+        networks:
+            - development
+        depends_on: 
+            - postgres
+            - minio
+        environment: 
+            MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+            AWS_ACCESS_KEY_ID: ivnard
+            AWS_SECRET_ACCESS_KEY: Orion123
+
+    # Tracking backend database
+    postgres:
+        build:
+            context: ./tracking-data
+            dockerfile: Dockerfile
+        image: postgres-dev:1
+        container_name: tracking-database-dev
+        volumes:
+            - datapostgres:/var/lib/postgresql/data
+        networks: 
+            - development
+        ports: 
+            - "5432:5432"
+        restart: always
+
+    # Tracking Artefact backend
+    minio:
+        build: 
+            context: ./tracking-artefacts
+            dockerfile: Dockerfile
+        image: minio-dev:1
+        container_name: tracking-artefact-dev
+        volumes:
+            - dataminio:/data
+        networks: 
+            - development
+        ports:
+            - "9000:9000"
+        environment:
+            MINIO_ACCESS_KEY: ivnard
+            MINIO_SECRET_KEY: Orion123
+        command: server /data
+
+volumes:
+    datasql:
+    mlflow:
+    datapostgres:
+    dataminio:
+
+networks: 
+    development:

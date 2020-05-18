@@ -27,7 +27,7 @@ services:
             - "8080:8080"
         depends_on: 
             - mysql
-            # - postgres
+            - postgres
         restart: always
 
     # # Notebook 
@@ -43,10 +43,10 @@ services:
             - development
         ports:
             - "8888:8888"
-        env_file: 
-            - ./docker/jupyter/secrets.env
         depends_on: 
             - mlflow
+        env_file: 
+            - ./docker/jupyter/secrets.env
         # environment:
         #     MLFLOW_TRACKING_URI: 'http://mlflow:5000'
         #     AWS_ACCESS_KEY_ID: ivnard
@@ -66,52 +66,56 @@ services:
             - "5000:5000"
         networks:
             - development
-        # depends_on: 
-        #     - postgres
-        #     - minio
-        environment: 
-            MLFLOW_S3_ENDPOINT_URL: http://minio:9000
-            AWS_ACCESS_KEY_ID: ivnard
-            AWS_SECRET_ACCESS_KEY: Orion123
+        depends_on: 
+            - postgres
+            - minio
+        env_file:
+            - ./docker/mlflow/secrets.env
+        # environment: 
+        #     MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+        #     AWS_ACCESS_KEY_ID: ivnard
+        #     AWS_SECRET_ACCESS_KEY: Orion123
 
-    # # Tracking backend database
-    # postgres:
-    #     build:
-    #         context: ./tracking-data
-    #         dockerfile: Dockerfile
-    #     image: postgres-dev:1
-    #     container_name: tracking-database-dev
-    #     volumes:
-    #         - datapostgres:/var/lib/postgresql/data
-    #     networks: 
-    #         - development
-    #     ports: 
-    #         - "5432:5432"
-    #     restart: always
+    # Tracking backend database
+    postgres:
+        build:
+            context: ./docker/postgres
+            dockerfile: Dockerfile.postgres
+        image: postgres-dev:1
+        container_name: tracking-database-dev
+        volumes:
+            - datapostgres:/var/lib/postgresql/data
+        networks: 
+            - development
+        ports: 
+            - "5432:5432"
+        restart: always
 
-    # # Tracking Artefact backend
-    # minio:
-    #     build: 
-    #         context: ./tracking-artefacts
-    #         dockerfile: Dockerfile
-    #     image: minio-dev:1
-    #     container_name: tracking-artefact-dev
-    #     volumes:
-    #         - dataminio:/data
-    #     networks: 
-    #         - development
-    #     ports:
-    #         - "9000:9000"
-    #     environment:
-    #         MINIO_ACCESS_KEY: ivnard
-    #         MINIO_SECRET_KEY: Orion123
-    #     command: server /data
+    # Tracking Artefact backend
+    minio:
+        build: 
+            context: ./docker/minio
+            dockerfile: Dockerfile.minio
+        image: minio-dev:1
+        container_name: tracking-artefact-dev
+        volumes:
+            - dataminio:/data
+        networks: 
+            - development
+        ports:
+            - "9000:9000"
+        env_file:
+            - ./docker/minio/secrets.env
+        # environment:
+        #     MINIO_ACCESS_KEY: ivnard
+        #     MINIO_SECRET_KEY: Orion123
+        command: server /data
 
 volumes:
     datasql:
     mlflow:
     datapostgres:
-    # dataminio:
+    dataminio:
 
 networks: 
     development:

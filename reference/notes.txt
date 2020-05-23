@@ -146,3 +146,15 @@ I've add to jupyter enviroment for testing purpose.
 - Jupyter Dash (https://github.com/plotly/jupyter-dash)
 - Docker SDK (https://anaconda.org/conda-forge/docker-py)
 
+
+#Mlflow client does not work fine with Minio
+
+I was not able to download_artifacts with mlflow client. Overcome with Minio Client
+
+# # run_id = regmodel_info['latest_versions'][0].run_id
+# # path = "/".join(regmodel_info['latest_versions'][0].source.split('/')[2:])
+
+# run_id = 'f4d1b856bb0a4abf9c8e42e6f7eb688f'
+# path = '/artifacts/1/019488b1b2f44793a30de8b3eeae1b72/artifacts/model'
+
+# client.download_artifacts(run_id, path, dst_path=outmodels)

@@ -19,16 +19,16 @@ services:
         restart: always
 
     # Database Manager
-    adminer:
-        image: adminer:4
-        networks:
-            - development
-        ports:
-            - "8080:8080"
-        depends_on: 
-            - mysql
-            - postgres
-        restart: always
+    # adminer:
+    #     image: adminer:4
+    #     networks:
+    #         - development
+    #     ports:
+    #         - "8080:8080"
+    #     depends_on: 
+    #         - mysql
+    #         - postgres
+    #     restart: always
 
     # # Notebook 
     jupyterlab:

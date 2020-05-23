@@ -12,6 +12,10 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 gitclone https://github.com/IvanNardini/ModelDeploy-AWS-HostedWebEndPoint.git
 
+##########################
+# Development enviroment #
+##########################
+
 # data - MySQL service
 
 The entrypoint script checks if DATADIR/mysql exists. 
@@ -131,5 +135,14 @@ The artifact store (used for log_model or log_artifact) is used to persist the l
 
 #############################################################################################################################
 
+######################
+# Staging Enviroment #
+######################
 
+I've add to jupyter enviroment for testing purpose.
+
+- flask
+- gunicorn
+- Jupyter Dash (https://github.com/plotly/jupyter-dash)
+- Docker SDK (https://anaconda.org/conda-forge/docker-py)
 

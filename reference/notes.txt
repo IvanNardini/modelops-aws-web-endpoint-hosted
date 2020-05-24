@@ -147,14 +147,33 @@ I've add to jupyter enviroment for testing purpose.
 - Docker SDK (https://anaconda.org/conda-forge/docker-py)
 
 
-#Mlflow client does not work fine with Minio
+# How to download artefact with Minio with Minio
 
-I was not able to download_artifacts with mlflow client. Overcome with Minio Client
+minioClient = Minio(os.environ['MLFLOW_S3_ENDPOINT_URL'].split('//')[1],
+                  access_key=os.environ['AWS_ACCESS_KEY_ID'],
+                  secret_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+                  secure=False)
 
-# # run_id = regmodel_info['latest_versions'][0].run_id
-# # path = "/".join(regmodel_info['latest_versions'][0].source.split('/')[2:])
+# Check buckets 
+buckets = minioClient.list_buckets()
+for bucket in buckets:
+    Bucket_Name = bucket.name
+    print(Bucket_Name, bucket.creation_date)
+    
+#Check for content
+objects = minioClient.list_objects_v2(
+        bucket_name = Bucket_Name, 
+        recursive=True)
 
-# run_id = 'f4d1b856bb0a4abf9c8e42e6f7eb688f'
-# path = '/artifacts/1/019488b1b2f44793a30de8b3eeae1b72/artifacts/model'
+ObjDataFrame = pd.DataFrame([(Bucket_Name, obj.object_name, obj.object_name.encode('utf-8'), obj.last_modified,
+                              obj.etag, obj.size, obj.content_type) for obj in objects])
+ObjDataFrame.columns = ["bucket", "object_name", "object", "data_last_modified", "etag", "size", "content"]
 
-# client.download_artifacts(run_id, path, dst_path=outmodels)
+mask = (ObjDataFrame.object_name.str.contains(artefact_name))
+ObjDataFrame[mask]
+    
+# #Download Model
+# try:
+#     minioClient.fget_object(bucket_name=obj.bucket_name, object_name=b'artifacts/1/019488b1b2f44793a30de8b3eeae1b72/artifacts/model/modeloyx7rlbx.pkl', file_path=outmodels)
+# except ResponseError as err:
+#     print(err)

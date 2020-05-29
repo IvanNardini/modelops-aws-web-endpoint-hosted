@@ -172,8 +172,4 @@ ObjDataFrame.columns = ["bucket", "object_name", "object", "data_last_modified",
 mask = (ObjDataFrame.object_name.str.contains(artefact_name))
 ObjDataFrame[mask]
     
-# #Download Model
-# try:
-#     minioClient.fget_object(bucket_name=obj.bucket_name, object_name=b'artifacts/1/019488b1b2f44793a30de8b3eeae1b72/artifacts/model/modeloyx7rlbx.pkl', file_path=outmodels)
-# except ResponseError as err:
-#     print(err)
+# I found out you Mlflow has search functionality to get Tracking page content (https://www.mlflow.org/docs/latest/search-syntax.html)

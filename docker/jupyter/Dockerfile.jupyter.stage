@@ -14,10 +14,13 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 ENV DOCKERVERSION=18.03.1-ce
+ENV USERDOCKER=jovyan
+
 RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz \
   && tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 \
                  -C /usr/local/bin docker/docker \
-  && rm docker-${DOCKERVERSION}.tgz
+  && rm docker-${DOCKERVERSION}.tgz \
+  && groupadd docker && usermod -aG docker ${USERDOCKER}
 
 USER $NB_UID
 
@@ -100,6 +103,4 @@ RUN pip install minio==5.0.10
 
 USER $NB_UID
 
-ENV USERDOCKER=jovyan
-
-CMD [ "groupadd docker", "usermod -aG docker ${USERDOCKER}", "chmod 777 /var/run/docker.sock" ]
+CMD [ "/bin/sh", "chmod 777 /var/run/docker.sock" ]

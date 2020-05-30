@@ -211,3 +211,18 @@ def get_top_n_ui(top, ui):
         return {k:v for k,v in top.items() if ui==k}
     except ValueError: # user was not part of the trainset
         return 0
+
+# Installing Docker client just for testing 
+
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+
+ENV DOCKERVERSION=18.03.1-ce
+RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz \
+  && tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 \
+                 -C /usr/local/bin docker/docker \
+  && rm docker-${DOCKERVERSION}.tgz
+
++ volumes 
+
+
+

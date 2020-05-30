@@ -10,8 +10,14 @@ USER root
 
 # ffmpeg for matplotlib anim & dvipng for latex labels
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg dvipng && \
+    apt-get install -y --no-install-recommends ffmpeg dvipng apt-transport-https ca-certificates curl software-properties-common && \
     rm -rf /var/lib/apt/lists/*
+
+ENV DOCKERVERSION=18.03.1-ce
+RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz \
+  && tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 \
+                 -C /usr/local/bin docker/docker \
+  && rm docker-${DOCKERVERSION}.tgz
 
 USER $NB_UID
 

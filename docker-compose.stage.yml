@@ -16,7 +16,7 @@ services:
         image: jupyterlab-stage:1
         container_name: notebook-stage
         volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
+            - /var/run/docker.sock:/var/run/docker.sock:ro
         networks: 
             - staging
 

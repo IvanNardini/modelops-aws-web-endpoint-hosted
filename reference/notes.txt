@@ -224,7 +224,7 @@ RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${
 
 + volumes /var/run/docker.sock
 
-+ docker exec -it 
++ docker exec -it -u 0 <containerid> sh
 
 + chmod 777 /var/run/docker.sock
 

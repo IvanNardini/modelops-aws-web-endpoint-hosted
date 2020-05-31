@@ -1,16 +1,17 @@
 
-FROM ubuntu:16.04
+FROM conda/miniconda3:latest
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
+LABEL Python - score app
 
-COPY ./requirements.txt /app/requirements.txt
-
-WORKDIR /app
-
-RUN pip install -r requirements.txt
+USER root
 
 COPY . /app
+
+RUN pip install --upgrade pip;
+    
+RUN pip install -r requirements.txt;
+
+WORKDIR /app
 
 ENV FLASK_APP=app.py
 

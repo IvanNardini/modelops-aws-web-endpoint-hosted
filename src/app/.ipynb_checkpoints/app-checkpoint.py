@@ -3,7 +3,7 @@ import logging
 import flask
 
 #create an instance
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 @app.route('/predict', methods=['GET','POST'])
 def predict():
@@ -11,9 +11,9 @@ def predict():
     logging.info('Scoring Application is starting to process the request')
     
     #Intiate variables
-    data = {}
+    data = defaultdict()
     data["success"] = False
-#     params = flask.request.argsgi
+#     params = flask.request.args
     
     return flask.jsonify(data)
     

@@ -1,15 +1,14 @@
 
 FROM conda/miniconda3:latest
 
-LABEL Python - score app
+LABEL Scoring App = "Reccomendation System - Python - Surprise"
 
 USER root
 
 COPY . /app
 
-RUN pip install --upgrade pip;
-    
-RUN pip install -r requirements.txt;
+RUN pip install --upgrade pip
+RUN pip install -r /app/requirements.txt
 
 WORKDIR /app
 

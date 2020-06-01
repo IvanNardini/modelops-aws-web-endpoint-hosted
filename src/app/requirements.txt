@@ -1,3 +1,5 @@
 
-flask==1.0.3
-pandas==1.0.4
+numpy
+pandas
+scikit-surprise
+flask

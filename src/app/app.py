@@ -6,6 +6,7 @@ import logging
 from collections import defaultdict
 
 import pandas as pd
+from surprise import dump
 
 import flask
 
@@ -70,10 +71,13 @@ def predict():
         uid_predictions = get_top_n_ui(get_top(predictions), uid_toscore)
         
         prediction_rank_lenght = len(uid_predictions)
-        prediction_rank_labels = ["".join([str(i), "°", " Product"]) for i in range(1,prediction_rank_lenght)]
+        prediction_rank_labels = ["".join([" Product", str(i)]) for i in range(1,prediction_rank_lenght)]
         products_recommended = pd.DataFrame(list(zip(prediction_rank_labels, uid_predictions)), columns=['Product_Rank', 'Product_id'])
+
+        data['response'] = products_recommended.to_dict()
+        data['success'] = True
     
-    return flask.jsonify(products_recommended)
+    return flask.jsonify(data)
             
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=9999, debug=True)

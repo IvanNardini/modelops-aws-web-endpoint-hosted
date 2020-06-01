@@ -25,4 +25,4 @@ EXPOSE 9999
 ENTRYPOINT [ "python" ]
 
 #Run flask application
-CMD [ "app.py" ]
+CMD [ "score_app.py" ]

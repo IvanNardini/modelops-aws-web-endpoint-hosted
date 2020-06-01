@@ -15,9 +15,6 @@ services:
             dockerfile: Dockerfile.jupyter.stage
         image: jupyterlab-stage:1
         container_name: notebook-stage
-        ports:
-        # Open port for Dash Lab
-            - "8050:8050"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
         networks: 

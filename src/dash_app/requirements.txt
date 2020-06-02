@@ -1,6 +1,0 @@
-
-numpy
-pandas
-scikit-surprise
-flask
-dash

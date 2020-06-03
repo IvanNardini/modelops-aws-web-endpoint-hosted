@@ -85,24 +85,9 @@ external_stylesheets = ['https://codepen.io/ivannardini/pen/QWyLZJw.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions = True)
 
-# Page 2
-
-app.layout = html.Div(
-    
-    #Frame in the iphone cover
-    id="iphoneCover", children=[
-        
-        html.Div(id="form_camp", children=[
-            
-            html.Div(id='predictions')
-        ])
-    ]
-)
-
-
 # Page 1
 
-login_layout = html.Div(
+app.layout = html.Div(
     
     #Frame in the iphone cover
     id="iphoneCover", children=[
@@ -127,16 +112,20 @@ login_layout = html.Div(
         html.Br(), 
         
         html.Div(id='form_camp_username', children=[
-             html.Button('login', type='submit', n_clicks=0), 
+             html.Button('Login', type='submit')
         ])
     
     ], action='/predictions', method='post')]), 
-])
+    
+        html.Div(id="out1"),
+        html.Div(id="out2")
+    ])
 
 @app.callback(
-    Output('predictions', 'children'),
-    [Input('login', 'n_click')], 
-    [State(component_id='uid', component_property='value')])
+    [Output('out2', component_property='children'), 
+     Output('out1', component_property='children')], 
+    [Input(component_id='uid', component_property='value')]
+)
 
 def predict(uid):
 #     logging.info('Scoring Application is starting to process the request')
@@ -152,8 +141,7 @@ def predict(uid):
     prodname = data["Product_Rank"]
     prodid = data["Product_id"]
     
-    return str(prodname), str(prodid)
-
+    return prodname, prodid
 
 if __name__ == '__main__':
     app.run_server(host="0.0.0.0", debug=True)

@@ -1,4 +1,8 @@
 
+'''
+Module to initiate Dash Server App
+'''
+
 import dash
 
 external_stylesheets = ['https://codepen.io/ivannardini/pen/QWyLZJw.css']

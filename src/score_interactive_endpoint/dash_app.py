@@ -88,7 +88,7 @@ def get_top_n_ui(top, uid):
 #Customerid Input
 c_id_component = component.Input(id="uid", 
                                  type="text", 
-                                 placeholder="")
+                                 placeholder='100')
 
 c_id_div = html.Div(id='customerid', children=[html.Label("Please enter your customer ID : "), 
                                                c_id_component,
@@ -107,22 +107,27 @@ app.layout= html.Div(
         
         html.H1('Recommendation System for Purchase Data'),
         html.H2('Scoring Interactive Web Service draft'),
-        html.Div(children=[c_id_div, predictions_div], className="row"),
+        html.Div(children=[c_id_div, 
+                           predictions_div], 
+                 className="row"),
     ]
 )
 
 @app.callback([Output('table', component_property='columns'), Output('table', component_property='data')],[Input(component_id='uid', component_property='value')])
 def predict(uid):
-#     logging.info('Scoring Application is starting to process the request')
-    model_path = locate_model(os.getcwd())
-    predictions, _ = model_reader(model_path)
-    uid_predictions = get_top_n_ui(get_top(predictions), uid)
-    prediction_rank_lenght = len(uid_predictions)
-    prediction_rank_labels = ["".join([" Product", str(i)]) for i in range(1,prediction_rank_lenght)]
-    products_recommended = pd.DataFrame(list(zip(prediction_rank_labels, uid_predictions)), columns=['Product_Rank', 'Product_id'])
-    columns=[{"name": i, "id": i} for i in products_recommended.columns]
-    return columns, products_recommended.to_dict('records')
-
+    columns = []
+    products_recommended = []
+    if uid:
+        model_path = locate_model(os.getcwd())
+        predictions, _ = model_reader(model_path)
+        uid_predictions = get_top_n_ui(get_top(predictions), uid)
+        prediction_rank_lenght = len(uid_predictions)
+        prediction_rank_labels = ["".join([" Product", str(i)]) for i in range(1,prediction_rank_lenght)]
+        products_recommended = pd.DataFrame(list(zip(prediction_rank_labels, uid_predictions)), columns=['Product_Rank', 'Product_id'])
+        columns=[{"name": i, "id": i} for i in products_recommended.columns]
+        return columns, products_recommended.to_dict('records')
+    else:
+        return columns, products_recommended
 
 if __name__ == '__main__':
     app.run_server(host="0.0.0.0", debug=True)

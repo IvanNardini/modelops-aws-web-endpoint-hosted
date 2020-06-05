@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 '''
 This is the docstring for module/script.
@@ -10,10 +11,15 @@ import pandas as pd
 from surprise import dump
 
 import dash
+import dash_table
 import dash_core_components as component
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
 
+from dash.dependencies import Input, Output
+
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions = True)
 
 def locate_model(dest):
     
@@ -79,91 +85,44 @@ def get_top_n_ui(top, uid):
     except ValueError: 
         return 0
 
+#Customerid Input
+c_id_component = component.Input(id="uid", 
+                                 type="text", 
+                                 placeholder="")
 
-external_stylesheets = ['https://codepen.io/ivannardini/pen/QWyLZJw.css']
+c_id_div = html.Div(id='customerid', children=[html.Label("Please enter your customer ID : "), 
+                                               c_id_component,
+                                               html.Br()], 
+                   className="six columns")
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions = True)
+#Prediction Output
+predictions_div = html.Div(id='predictions', 
+                           children=[html.H4(children='Products Recommended'),
+                                     dash_table.DataTable(id='table')],
+                           className="six columns")
 
-#page 1 
-app.layout = html.Div(
+app.layout= html.Div(
     
-    #Frame in the iphone cover
-    id="iphoneCover", children=[
+    id="score_gui", children=[
         
-#     component.Location(id='url', refresh=False),
-    
-    #Insert a form
-    html.Div(id="form", children=[ 
-    
-    html.Form(children=[
-        
-        html.Div(id='form_camp_customerid', children=[
-            html.Label('Customer ID: '), 
-            component.Input(id='uid', name='uid', type='text', placeholder='Customer ID')
-        ]), 
-        
-        html.Br(), 
-        
-        html.Div(id='form_camp_password', children=[
-            html.Label('Password: '),
-            component.Input(id='password', type='password',  placeholder='Enter Password')
-        ]), 
-        
-        html.Br(), 
-        
-        html.Div(id='form_camp_username', children=[
-            html.Button('Login', type='submit', n_clicks=0)
-        ])
-    
-    ])])
-])
+        html.H1('Recommendation System for Purchase Data'),
+        html.H2('Scoring Interactive Web Service draft'),
+        html.Div(children=[c_id_div, predictions_div], className="row"),
+    ]
+)
 
+@app.callback([Output('table', component_property='columns'), Output('table', component_property='data')],[Input(component_id='uid', component_property='value')])
+def predict(uid):
+#     logging.info('Scoring Application is starting to process the request')
+    model_path = locate_model(os.getcwd())
+    predictions, _ = model_reader(model_path)
+    uid_predictions = get_top_n_ui(get_top(predictions), uid)
+    prediction_rank_lenght = len(uid_predictions)
+    prediction_rank_labels = ["".join([" Product", str(i)]) for i in range(1,prediction_rank_lenght)]
+    products_recommended = pd.DataFrame(list(zip(prediction_rank_labels, uid_predictions)), columns=['Product_Rank', 'Product_id'])
+    columns=[{"name": i, "id": i} for i in products_recommended.columns]
+    return columns, products_recommended.to_dict('records')
 
-#Page 2 
-score_layout = html.Div(id='form', children=[
-        
-        html.Form(children=[
-
-        html.Div(id='form_camp_customerid', children=[
-            html.Label('Customer ID: '), 
-            component.Input(id='uid', name='uid', type='text', placeholder='Customer ID')]), 
-
-        html.Br(), 
-
-        html.Div(id='form_camp_password', children=[
-            html.Label('Suca: '),
-            component.Input(id='password', type='password',  placeholder='Enter Password')]), 
-
-        html.Br()])
-])
-
-
-@app.callback(Output('form', 'children'), [Input('login', 'n_clicks')]
-def display_page(n_clicks):
-    if n_clicks > 0:
-        return score_layout
-             )
-        
-# @app.callback([Output('out2', component_property='children'), Output('out1', component_property='children')],
-#               [Input('login', 'n_clicks'), Input('url', 'pathname')])
-
-# def predict(n_clicks, pathname):
-#     if n_clicks > 0:
-        
-#         uid = pathname.split("=")[1].strip()
-#         model_path = locate_model(os.getcwd())
-#         predictions, _ = model_reader(model_path)
-#         uid_predictions = get_top_n_ui(get_top(predictions), uid)
-
-#         prediction_rank_lenght = len(uid_predictions)
-#         prediction_rank_labels = ["".join([" Product", str(i)]) for i in range(1,prediction_rank_lenght)]
-#         products_recommended = pd.DataFrame(list(zip(prediction_rank_labels, uid_predictions)), columns=['Product_Rank', 'Product_id'])
-
-#         data = products_recommended.to_dict()
-#         prodname = data["Product_Rank"]
-#         prodid = data["Product_id"]
-        
-#         return str(prodname), str(prodid)
 
 if __name__ == '__main__':
     app.run_server(host="0.0.0.0", debug=True)

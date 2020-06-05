@@ -90,28 +90,33 @@ c_id_component = component.Input(id="uid",
                                  type="text", 
                                  placeholder='100')
 
-c_id_div = html.Div(id='customerid', children=[html.Label("Please enter your customer ID : "), 
+c_id_div = html.Div(id='customerid', children=[html.H6("Please enter your customer ID : "), 
                                                c_id_component,
                                                html.Br()], 
-                   className="six columns")
+                   className="two columns")
 
 #Prediction Output
+predictions = dash_table.DataTable(id='table',
+                                   css=[{'selector': 'table', 'rule': 'table-layout: fixed'}],
+                                   style_as_list_view=True, 
+                                   style_cell={'width': '30%', 'textAlign': 'left'},
+                                   style_header={'backgroundColor': 'white', 'fontWeight': 'bold'})
+
 predictions_div = html.Div(id='predictions', 
-                           children=[html.H4(children='Products Recommended'),
-                                     dash_table.DataTable(id='table')],
-                           className="six columns")
+                           children=[html.H6(children='Products Recommended'),
+                                     predictions],
+                           style={'width': '25%'}, 
+                           className="ten columns")
+                           
 
 app.layout= html.Div(
     
     id="score_gui", children=[
-        
         html.H1('Recommendation System for Purchase Data'),
-        html.H2('Scoring Interactive Web Service draft'),
-        html.Div(children=[c_id_div, 
-                           predictions_div], 
-                 className="row"),
-    ]
-)
+        html.H2('Scoring Interactive Web Service (Basic Concept)'),
+        html.Br(), 
+        html.Div(children=[c_id_div, predictions_div], className="row")
+    ])
 
 @app.callback([Output('table', component_property='columns'), Output('table', component_property='data')],[Input(component_id='uid', component_property='value')])
 def predict(uid):

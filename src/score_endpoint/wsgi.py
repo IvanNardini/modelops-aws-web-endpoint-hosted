@@ -1,5 +1,5 @@
 
-from app import app
+from app import *
 import logging
 import os
 
@@ -7,7 +7,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 if __name__ != '__main__':
-    app.run(host='0.0.0.0', port=9999)
+    app.run()
     #Return a logger named gunicorn.error
     gunicorn_logger = logging.getLogger('gunicorn.error')
     #Set app logging policies

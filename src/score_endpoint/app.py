@@ -2,23 +2,21 @@
 # -*- coding: utf-8 -*-
 
 '''
-This is the docstring for module/script.
+A basic Flask application for scoring web endpoint.
 '''
 
 import os
-import logging
 from collections import defaultdict
-
 import pandas as pd
 from surprise import dump
 
 import flask
-
+from flask import Flask, jsonify, Response
 import warnings
 warnings.filterwarnings("ignore")
 
 #create an instance
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 def locate_model(dest):
     
@@ -84,11 +82,14 @@ def get_top_n_ui(top, uid):
     except ValueError: 
         return 0
 
+@app.route('/', methods=['GET'])
+def health_checker():
+    text = 'The Scoring application is ready!'
+    return Response(text, status=200, mimetype='text/plain')
+
 @app.route('/predict', methods=['GET','POST'])
-def predict():
-    
-    logging.info('Scoring Application is starting to process the request')
-    
+def predictor():
+
     #Intiate variables
     data = defaultdict()
     data["success"] = False
@@ -108,6 +109,3 @@ def predict():
         data['success'] = True
     
     return flask.jsonify(data)
-            
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9999, debug=True)

@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 9999
 
 #Entrypoint python exec
-ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "/bin/sh" ]
 
 #Run flask application
-CMD [ "score_app.py" ]
+CMD [ "run_server.sh" ]

@@ -20,7 +20,9 @@ Based on that, I start thinking about a possible machine learning system and I a
 
 Below the **high-level architecture of the project**: 
 
+<p align="center">
 <img src="https://github.com/IvanNardini/modelops-aws-web-endpoint-hosted/raw/master/architecture.png">
+</p>
 
 And, at the end, this is the Dash Interactive Web Service I get
 

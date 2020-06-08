@@ -5,7 +5,7 @@ The goal is deploying a Recommendation System as Hosted Interactive Web Service 
 To achive that, I put together what I learned from IBM’s AI Workflow: Enterprise Model Deployment certification on Coursera and other seminaries I attented from Databricks. 
 
 
-**The Scenario**
+## The Scenario
 
 Because I'm not interested about modelling, I goggled a bit and I find this interesting article “How to Build a Recommendation System for Purchase Data (Step-by-Step)”. In this article, the scenario is 
 

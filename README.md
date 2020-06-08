@@ -56,6 +56,9 @@ python3 -m venv pyenv
 source ./pyenv/bin/activate
 #install packages
 pip install -r ./src/score_interactive_endpoint/requirements.txt
+#run application
+chmod +x ./run.py
+python ./run.py
 ```
 
 ## Contributing

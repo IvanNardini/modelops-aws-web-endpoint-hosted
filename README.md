@@ -30,17 +30,18 @@ And, at the end, this is the Dash Interactive Web Service I get
 
 Depending on which enviroment you want to run (Experimentation, Development and Test environment or Staging, Preproduction and Production environment) you can run: 
 
-'''
+```
 docker-compose -f docker-compose.dev.yml build
 docker-compose -f docker-compose.dev.yml up
-'''
-'''
+```
+
+```
 docker-compose -f docker-compose.dev.yml -f docker-compose.stage.yml build 
 docker-compose -f docker-compose.dev.yml -f docker-compose.stage.yml build 
-'''
+```
 Once you prototype the dashboard, you can deploy it on AWS EC2 Instance with 
 
-'''
+```
 # update local packages
 sudo apt-get update -y
 # install dependencies
@@ -51,7 +52,8 @@ python3 -m venv pyenv
 source ./pyenv/bin/activate
 #install packages
 pip install -r ./src/score_interactive_endpoint/requirements.txt
-'''
+```
+
 ## Contributing
 
 Test it. And please provide me feedback for improvements. Pull requests are welcome as well.

@@ -24,7 +24,7 @@ Below the **high-level architecture of the project**:
 
 And, at the end, this is the Dash Interactive Web Service I get
 
-<img src="https://github.com/IvanNardini/modelops-aws-web-endpoint-hosted/raw/master/modelops_app.gif" class="center">
+<img src="https://github.com/IvanNardini/modelops-aws-web-endpoint-hosted/raw/master/modelops_app.gif" alt="modelops_app" class="center">
 
 ## Usage 
 
